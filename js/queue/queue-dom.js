@@ -10,36 +10,64 @@ const dequeue = document.querySelector('.btn-take-dequeue');
 const queue = new Queue();
 
 const clearQueueInput = () => {
-  // ... your code goes here
+  queueInput.value = '';
 };
 
 const generateListQueue = () => {
-  // ... your code goes here
+  queueUL.innerHTML = '';
+  const queueContents = [];
+  const queueItems = queue.display();
+
+  for (let i = 0; i < queue.MAX_SIZE; i++) {
+    let elem = document.createElement('li');
+    elem.setAttribute('id', i);
+    elem.className = 'inactive';
+    queueContents.push(elem);
+
+    if (queueItems[i] || queueItems[i] === '') {
+      queueContents[i].innerText = queueItems[i];
+      queueContents[i].className = 'active';
+    }
+  }
+
+  queueContents.forEach((elem) => queueUL.appendChild(elem));
 };
 
 generateListQueue();
 
 const generateWarningQueue = (type) => {
   if (type === 'underflow') {
-    // ... your code goes here
+    console.log('error');
+    warningBottomQueue.innerText = 'WARNING! Queue Underflow!';
+    warningBottomQueue.style.display = 'block';
+    setTimeout(() => {
+      warningBottomQueue.style.display = 'none';
+    }, 5000);
   } else if (type === 'overflow') {
-    // ... your code goes here
+    warningTopQueue.innerText = 'WARNING! Queue Overflow!';
+    warningTopQueue.style.display = 'block';
+    setTimeout(() => {
+      warningTopQueue.style.display = 'none';
+    }, 5000);
   }
 };
 
 const addToQueue = () => {
   try {
-    // ... your code goes here
+    queue.enqueue(queueInput.value);
+    generateListQueue();
+    clearQueueInput();
   } catch (error) {
-    // there was an overflow error, handle it
+    generateWarningQueue('overflow');
   }
 };
 
 const removeFromQueue = () => {
   try {
-    // ... your code goes here
+    queue.dequeue();
+    generateListQueue();
   } catch (error) {
-    // there was an underflow error, handle it
+    generateWarningQueue('underflow');
   }
 };
 
